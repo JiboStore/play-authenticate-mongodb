@@ -2,11 +2,14 @@ package controllers.apns;
 
 import com.notnoop.apns.*;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import models.User;
+import play.Play;
 import play.Routes;
+import play.Logger;
 import play.data.Form;
 import play.mvc.*;
 import play.mvc.Http.Response;
@@ -29,9 +32,11 @@ import views.html.*;
 public class RegistrationController extends Controller {
 	
 	public static Result index() {
+		File f = Play.application().path();
+		Logger.error("index root: " + f.getAbsolutePath());
 		ApnsService service =
 			    APNS.newService()
-			    .withCert("/path/to/certificate.p12", "MyCertPassword")
+			    .withCert("conf/certificates/dev.p12", "123456")
 			    .withSandboxDestination()
 			    .build();
 		String payload = APNS.newPayload().alertBody("Can't be simpler than this!").build();
