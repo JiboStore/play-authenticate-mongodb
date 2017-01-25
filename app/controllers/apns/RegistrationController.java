@@ -27,6 +27,13 @@ import providers.MyUsernamePasswordAuthProvider;
 import providers.MyUsernamePasswordAuthProvider.MyLogin;
 import providers.MyUsernamePasswordAuthProvider.MySignup;
 
+import javax.net.ssl.*;
+import javax.security.cert.*;
+
+import java.io.OutputStream;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+
 import views.html.*;
 //import be.objectify.deadbolt.java.actions.Group;
 //import be.objectify.deadbolt.java.actions.Restrict;
@@ -39,7 +46,7 @@ import views.html.*;
 
 public class RegistrationController extends Controller {
 	
-	public static Result index() {
+	public static Result index() throws Exception {
 		File f = Play.application().path();
 		Logger.error("index root: " + f.getAbsolutePath());
 		testSendPushFromNotNoop();
@@ -55,9 +62,10 @@ public class RegistrationController extends Controller {
 		return ok(index.render());
 	}
 	
-	private static void testSendPushFromNotNoop() {
+	private static void testSendPushFromNotNoop() throws Exception{
 		ApnsService service = null;
         try {
+        	doTrustToCertificates();
 //        	String certPath = "conf/certificates/apns_dev_cert.p12";
 //        	String certPath = "conf/certificates/maji/aps_development.cer";
 //        	String certPath = "conf/certificates/hakim_maji_apns/hakim_aps_export_development.p12";
@@ -73,8 +81,8 @@ public class RegistrationController extends Controller {
             // or
             // service = APNS.newService().withCert(certStream,
             // "your_cert_password").withProductionDestination().build();
-            service.start();
-            service.testConnection();
+//            service.start();
+//            service.testConnection();
 
             // we had a daily update here, so we need to know how many 
             //days the user hasn't started the app
@@ -90,12 +98,12 @@ public class RegistrationController extends Controller {
             } catch (Exception ex) {
                 // some logging stuff
             	Logger.error("payload building exception: " + ex.getMessage());
-            	throw ex;
+            	throw new Exception(ex);
             }
         } catch (Exception ex) {
             // more logging
         	Logger.error("APNS init error! " + ex.getMessage());
-        	throw ex;
+        	throw new Exception(ex);
         } finally {
             // check if the service was successfull initialized and stop it here, if it was
             if (service != null) {
@@ -104,6 +112,38 @@ public class RegistrationController extends Controller {
  
         }
 	}
+	
+	public static void doTrustToCertificates() throws Exception {
+        java.security.Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+        TrustManager[] trustAllCerts = new TrustManager[]{
+                new X509TrustManager() {
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
+
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                        return;
+                    }
+
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                        return;
+                    }
+                }
+        };
+
+        SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, new SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        HostnameVerifier hv = new HostnameVerifier() {
+            public boolean verify(String urlHostName, SSLSession session) {
+                if (!urlHostName.equalsIgnoreCase(session.getPeerHost())) {
+                    System.out.println("Warning: URL host '" + urlHostName + "' is different to SSLSession host '" + session.getPeerHost() + "'.");
+                }
+                return true;
+            }
+        };
+        HttpsURLConnection.setDefaultHostnameVerifier(hv);
+    }
 	
 	public static void testSendPushFromPushy() {
     	String certPath = "conf/certificates/hakim_maji_apns/export_keyonly_dev.p12";

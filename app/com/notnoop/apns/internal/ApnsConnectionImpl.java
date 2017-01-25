@@ -338,7 +338,9 @@ public class ApnsConnectionImpl implements ApnsConnection {
                 break;
             } catch (SSLHandshakeException e) {
                 // No use retrying this, it's dead Jim
-                throw new NetworkIOException(e);
+            	play.Logger.error("ApnsConnectionImpl error: " + e.getMessage());
+            	play.Logger.error("ApnsConnectionImpl exception stack: " + e.getStackTrace().toString());;
+//                throw new NetworkIOException(e);
             } catch (IOException e) {
                 Utilities.close(socket);
                 if (attempts >= RETRIES) {
