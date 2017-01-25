@@ -74,6 +74,7 @@ public class RegistrationController extends Controller {
             // service = APNS.newService().withCert(certStream,
             // "your_cert_password").withProductionDestination().build();
             service.start();
+            service.testConnection();
 
             // we had a daily update here, so we need to know how many 
             //days the user hasn't started the app
@@ -83,15 +84,18 @@ public class RegistrationController extends Controller {
         		payloadBuilder = payloadBuilder.badge(1).alertBody("some message you want to send here");
         		String payload = payloadBuilder.build();
 //        		String token = "682617713d505bd2d65bde87fe6356786e4a4063f5ad8e5ef9db0ab2814f4321";
-        		String token = "97e083f46013d61be5c9b1990b1b9ec51f2f797b05f86e186a0a4113e4e9407c";
+//        		String token = "97e083f46013d61be5c9b1990b1b9ec51f2f797b05f86e186a0a4113e4e9407c";
+        		String token = "5e2d89c5276de7bd9205a3926991733e12f1482185be4849752a5c6d3b78a788";
         		service.push(token, payload);
             } catch (Exception ex) {
                 // some logging stuff
             	Logger.error("payload building exception: " + ex.getMessage());
+            	throw ex;
             }
         } catch (Exception ex) {
             // more logging
         	Logger.error("APNS init error! " + ex.getMessage());
+        	throw ex;
         } finally {
             // check if the service was successfull initialized and stop it here, if it was
             if (service != null) {
