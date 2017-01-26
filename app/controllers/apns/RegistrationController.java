@@ -70,8 +70,11 @@ public class RegistrationController extends Controller {
 //        	String certPath = "conf/certificates/maji/aps_development.cer";
 //        	String certPath = "conf/certificates/hakim_maji_apns/hakim_aps_export_development.p12";
 //        	String certPath = "conf/certificates/hakim_maji_apns/export_keyonly_dev.p12";
-        	String certPath = "conf/certificates/hakim_maji_apns/export_keyonly_dev.p12"; // ok on urban airship
+//        	String certPath = "conf/certificates/hakim_maji_apns/export_keyonly_dev.p12"; // ok on urban airship
 //        	String certPath = "conf/certificates/apns_dev_cert.p12"; // ok on urban airship
+//        	String certPath = "conf/certificates/hakim_maji_apns/170126_hakim_apns_dev_cert_only.p12";
+        	String certPath = "conf/certificates/hakim_maji_apns/170126b_hakim_apns_dev_cert_and_privatekey.p12";
+//        	String certPath = "conf/certificates/hakim_maji_apns/170126b_hakim_apns_dev_cert_and_privatekey.pem";
         	File certFile = new File(certPath);
         	Logger.error("cert file exist: " + certFile.exists());
         	Logger.error("cert file size: " + certFile.length());
