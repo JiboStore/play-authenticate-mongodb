@@ -32,7 +32,7 @@ public class CasinoApnsController extends Controller {
 		return ok(index.render());
 	}
 	
-	public Result registrationAction() {
+	public static Result registerAction() {
 		Map<String, String[]> postData = request().body().asFormUrlEncoded();
 		for ( Map.Entry<String, String[]> entry : postData.entrySet() ) {
 			Logger.error("registration pair: " + entry.getKey() + " : " + entry.getValue().toString());
