@@ -3,6 +3,7 @@
 # ~~~~
 
 GET		/apns-register				controllers.apns.RegistrationController.index()
+GET		/testpush					controllers.apns.TestPushController.testPushAction()
 
 # Home page
 GET     /                           controllers.Application.index()
