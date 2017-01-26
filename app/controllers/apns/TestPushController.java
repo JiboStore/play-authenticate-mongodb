@@ -6,12 +6,14 @@ import com.notnoop.apns.ApnsService;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+import views.html.*; // for index.render();
+
 public class TestPushController extends Controller {
 	
 	private static final String certPath = 
-			"conf/certificates/hakim_maji_apns/170126b_hakim_apns_dev_cert_and_privatekey.p12";
+			"conf/certificates/apns_dev_export_single_selection_root_from_keychain.p12";
 	private static final String deviceToken = 
-			"5e2d89c5276de7bd9205a3926991733e12f1482185be4849752a5c6d3b78a788";
+			"2404d486d44d6718407ef5db94639b9a99942de0bdbc879ea4c5602625e65e1b";
 	
 	public static Result testPushAction() {
 		ApnsService service =
@@ -19,14 +21,14 @@ public class TestPushController extends Controller {
 			    .withCert(certPath, "123456")
 			    .withSandboxDestination()
 			    .build();
-		String payload = APNS.newPayload().alertBody("sent using notnoop play entry point!").build();
+		String payload = APNS.newPayload().badge(1).alertBody("sent using notnoop play entry point from testpush!").build();
 		service.push(deviceToken, payload);
-		try {
-			Thread.sleep(10000);
-		} catch ( InterruptedException ie ) {
-			
-		}
-		return ok();
+//		try {
+//			Thread.sleep(10000);
+//		} catch ( InterruptedException ie ) {
+//			
+//		}
+		return ok(index.render());
 	}
 
 }
