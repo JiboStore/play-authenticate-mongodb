@@ -79,8 +79,12 @@ public class RegistrationController extends Controller {
         	Logger.error("cert file exist: " + certFile.exists());
         	Logger.error("cert file size: " + certFile.length());
             // get the certificate
-            InputStream certStream = Application.class.getClassLoader().getResourceAsStream(certPath);
-            service = APNS.newService().withCert(certStream, "123456").withSandboxDestination().build();
+//            InputStream certStream = Application.class.getClassLoader().getResourceAsStream(certPath);
+//            service = APNS.newService().withCert(certStream, "123456").withSandboxDestination().build();
+            service = APNS.newService().withCert(certPath, "123456").withSandboxDestination().build();
+            String szPayload = APNS.newPayload().alertBody("sent using registraton controller play entry point!").build();
+            String szToken = "5e2d89c5276de7bd9205a3926991733e12f1482185be4849752a5c6d3b78a788";
+    		service.push(szToken, szPayload);
             // or
             // service = APNS.newService().withCert(certStream,
             // "your_cert_password").withProductionDestination().build();
@@ -91,13 +95,14 @@ public class RegistrationController extends Controller {
             //days the user hasn't started the app
             // so that we get the number of updates to display it as the badge.
         	try {
-        		PayloadBuilder payloadBuilder = APNS.newPayload();
-        		payloadBuilder = payloadBuilder.badge(1).alertBody("some message you want to send here");
-        		String payload = payloadBuilder.build();
-//        		String token = "682617713d505bd2d65bde87fe6356786e4a4063f5ad8e5ef9db0ab2814f4321";
-//        		String token = "97e083f46013d61be5c9b1990b1b9ec51f2f797b05f86e186a0a4113e4e9407c";
-        		String token = "5e2d89c5276de7bd9205a3926991733e12f1482185be4849752a5c6d3b78a788";
-        		service.push(token, payload);
+//        		PayloadBuilder payloadBuilder = APNS.newPayload();
+//        		payloadBuilder = payloadBuilder.badge(1).alertBody("some message you want to send here");
+//        		String payload = payloadBuilder.build();
+////        		String token = "682617713d505bd2d65bde87fe6356786e4a4063f5ad8e5ef9db0ab2814f4321";
+////        		String token = "97e083f46013d61be5c9b1990b1b9ec51f2f797b05f86e186a0a4113e4e9407c";
+//        		String token = "5e2d89c5276de7bd9205a3926991733e12f1482185be4849752a5c6d3b78a788";
+//        		service.push(token, payload);
+//        		Thread.sleep(1000);
             } catch (Exception ex) {
                 // some logging stuff
             	Logger.error("payload building exception: " + ex.getMessage());
