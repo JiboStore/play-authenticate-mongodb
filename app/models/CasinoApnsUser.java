@@ -6,6 +6,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Indexed;
+import org.mongodb.morphia.query.Query;
 
 import com.mongodb.DBCollection;
 
@@ -24,6 +25,9 @@ public class CasinoApnsUser {
 	@Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date created;
 	
+	@Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
+	public Date lastpush;
+	
 	public static List<String> getAllToken() {
 		DBCollection collections = MorphiaObject.datastore.getCollection(CasinoApnsUser.class);
 		List allToken = collections.distinct("token");
@@ -32,6 +36,12 @@ public class CasinoApnsUser {
 			Logger.error("CasinoApnsUser getAllToken: " + szToken);
 		}
 		return allTokenString;
+	}
+	
+	public static List<CasinoApnsUser> getAllUsers() {
+		Query<CasinoApnsUser> qUser = MorphiaObject.datastore.createQuery(CasinoApnsUser.class);
+		List<CasinoApnsUser> users = qUser.asList();
+		return users;
 	}
 	
 	public static CasinoApnsUser find(final String token) {
@@ -44,6 +54,10 @@ public class CasinoApnsUser {
 			Logger.error("CasinoApnsUser found: " + token);
 		}
 		return user;
+	}
+	
+	public static void save(final CasinoApnsUser user) {
+		MorphiaObject.datastore.save(user);
 	}
 
 	public static CasinoApnsUser create(final String token) {

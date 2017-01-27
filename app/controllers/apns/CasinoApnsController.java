@@ -1,5 +1,6 @@
 package controllers.apns;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -35,16 +36,22 @@ public class CasinoApnsController extends Controller {
 	}
 	
 	public static Result sendallAction() {
-		List<String> token = CasinoApnsUser.getAllToken();
+//		List<String> token = CasinoApnsUser.getAllToken();
+		List<CasinoApnsUser> users = CasinoApnsUser.getAllUsers();
 		ApnsService service =
 			    APNS.newService()
 			    .withCert(certPath, "123456")
 			    .withSandboxDestination()
 			    .build();
 		String payload = APNS.newPayload().badge(1).alertBody("Just to bug you!").build();
-		for ( String szToken : token ) {
-			service.push(szToken, payload);
+		for ( CasinoApnsUser user : users ) {
+			service.push(user.token, payload);
+			user.lastpush = new Date();
+			CasinoApnsUser.save(user);
 		}
+//		for ( String szToken : token ) {
+//			service.push(szToken, payload);
+//		}
 		return ok(index.render());
 	}
 	
