@@ -1,11 +1,13 @@
 package controllers.apns;
 
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.notnoop.apns.APNS;
 import com.notnoop.apns.ApnsService;
 
+import models.CasinoApnsUser;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -32,10 +34,36 @@ public class CasinoApnsController extends Controller {
 		return ok(index.render());
 	}
 	
+	public static Result sendallAction() {
+		List<String> token = CasinoApnsUser.getAllToken();
+		ApnsService service =
+			    APNS.newService()
+			    .withCert(certPath, "123456")
+			    .withSandboxDestination()
+			    .build();
+		String payload = APNS.newPayload().badge(1).alertBody("Just to bug you!").build();
+		for ( String szToken : token ) {
+			service.push(szToken, payload);
+		}
+		return ok(index.render());
+	}
+	
 	public static Result registerAction() {
 		Map<String, String[]> postData = request().body().asFormUrlEncoded();
 		for ( Map.Entry<String, String[]> entry : postData.entrySet() ) {
 			Logger.error("registration pair: " + entry.getKey() + " : " + entry.getValue().toString());
+			String[] values = entry.getValue();
+			String szToken = null;
+			for ( String szValue : values ) {
+				Logger.error(entry.getKey() + " => " + szValue );
+				szToken = szValue;
+			}
+			if ( szToken != null ) {
+				CasinoApnsUser user = CasinoApnsUser.find(szToken);
+				if ( user == null ) {
+					CasinoApnsUser.create(szToken);
+				}
+			}
 		}
 		return ok(index.render());
 	}

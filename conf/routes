@@ -6,6 +6,7 @@ GET		/apns-register				controllers.apns.RegistrationController.index()
 GET		/testpush					controllers.apns.TestPushController.testPushAction()
 
 POST	/casino/apns/register		controllers.apns.CasinoApnsController.registerAction()
+GET		/casino/apns/sendall		controllers.apns.CasinoApnsController.sendallAction()
 
 # Home page
 GET     /                           controllers.Application.index()
