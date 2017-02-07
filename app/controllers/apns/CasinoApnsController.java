@@ -10,19 +10,51 @@ import com.notnoop.apns.ApnsService;
 
 import models.CasinoApnsUser;
 import play.Logger;
+import play.api.mvc.MultipartFormData;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
+import play.mvc.Http.RawBuffer;
 import play.mvc.Result;
 
 import views.html.*;
 
 public class CasinoApnsController extends Controller {	
 	
+//	private static final String certPath = 
+//			"conf/certificates/apns_dev_export_single_selection_root_from_keychain.p12";
 	private static final String certPath = 
-			"conf/certificates/apns_dev_export_single_selection_root_from_keychain.p12";
+			"conf/certificates/server_certificates_bundle_sandbox/export_single_selection_root.p12";
 	private static final String deviceToken = 
 			"2404d486d44d6718407ef5db94639b9a99942de0bdbc879ea4c5602625e65e1b";
+	
+	public static Result testpostAction() {
+		Logger.error("CasinoApnsController.testpostAction");
+		try {
+			Map<String, String[]> postData = request().body().asFormUrlEncoded();
+			if ( postData == null ) {
+				Logger.error("postData is null!");
+				String body = request().body().asText();
+				Logger.error("postData as text: " + body);
+				RawBuffer raw = request().body().asRaw();
+				Logger.error("postData as rawbuffer: " + raw.toString());
+				Logger.error("requestBody: " + request().body().toString());
+			}
+			for ( Map.Entry<String, String[]> entry : postData.entrySet() ) {
+				Logger.error("post param pair: " + entry.getKey() + " : " + entry.getValue().toString());
+				String[] values = entry.getValue();
+				String szToken = null;
+				for ( String szValue : values ) {
+					Logger.error(entry.getKey() + " => " + szValue );
+					szToken = szValue;
+				}
+			}
+		} catch ( Exception e ) {
+			Logger.error("exception in testpostaction: " + e.getLocalizedMessage());
+			e.printStackTrace();
+		}
+		return ok(index.render());
+	}
 	
 	public static Result testPushAction() {
 		ApnsService service =
