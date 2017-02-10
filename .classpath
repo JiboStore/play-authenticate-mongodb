@@ -4,7 +4,6 @@
 	<classpathentry kind="src" path="conf"/>
 	<classpathentry excluding="resources/" kind="src" path="test"/>
 	<classpathentry kind="src" path="test/resources"/>
-	<classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
 	<classpathentry kind="lib" path="/Users/hakimhauston/.ivy2/cache/com.typesafe.play/twirl-api_2.11/jars/twirl-api_2.11-1.0.2.jar"/>
 	<classpathentry kind="lib" path="/Users/hakimhauston/.ivy2/cache/org.apache.commons/commons-lang3/jars/commons-lang3-3.1.jar"/>
 	<classpathentry kind="lib" path="/Users/hakimhauston/.ivy2/cache/org.scala-lang.modules/scala-xml_2.11/bundles/scala-xml_2.11-1.0.1.jar"/>
@@ -139,6 +138,7 @@
 	<classpathentry kind="lib" path="/Development/macosx/tools/activator-dist-1.3.12/repository/org.seleniumhq.selenium/selenium-support/2.39.0/jars/selenium-support.jar"/>
 	<classpathentry kind="lib" path="/Development/macosx/tools/activator-dist-1.3.12/repository/org.easytesting/fest-assert/1.4/jars/fest-assert.jar"/>
 	<classpathentry kind="lib" path="/Development/macosx/tools/activator-dist-1.3.12/repository/org.easytesting/fest-util/1.1.6/jars/fest-util.jar"/>
+	<classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/Development/svn/GitHub/play-authenticate-mongo/target/scala-2.11/classes_managed"/>
 	<classpathentry kind="lib" path="/Users/hakimhauston/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.1.jar"/>
