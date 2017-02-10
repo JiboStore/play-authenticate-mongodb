@@ -4,6 +4,7 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import models.TokenAction;
 import models.TokenAction.Type;
 import models.User;
+import play.Logger;
 import play.data.Form;
 import play.i18n.Messages;
 import play.mvc.Controller;
@@ -23,6 +24,8 @@ import views.html.account.signup.exists;
 import controllers.routes;
 
 import static play.data.Form.form;
+
+import java.util.Map;
 
 public class Signup extends Controller {
 
@@ -56,6 +59,7 @@ public class Signup extends Controller {
 	private static final Form<MyIdentity> FORGOT_PASSWORD_FORM = form(MyIdentity.class);
 
 	public static Result forgotPassword(final String email) {
+		Logger.error("controller.Signup.forgotPassword: " + email);
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
 		Form<MyIdentity> form = FORGOT_PASSWORD_FORM;
 		if (email != null && !email.trim().isEmpty()) {
@@ -68,8 +72,18 @@ public class Signup extends Controller {
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
 		final Form<MyIdentity> filledForm = FORGOT_PASSWORD_FORM
 				.bindFromRequest();
+		try {
+			// Save the day: http://stackoverflow.com/a/17784109/474330
+			Map<String, String> formData = filledForm.data();
+			for ( Map.Entry<String, String> entry : formData.entrySet() ) {
+				Logger.error("Signup.doForgotPassword entry: " + entry.getKey() + " => " + entry.getValue());
+			}
+		} catch ( Exception e ) {
+			Logger.error("Signup doForgotPassword exception traversing form: " + e.getMessage());
+		}
 		if (filledForm.hasErrors()) {
 			// User did not fill in his/her email
+			Logger.error("Signup.doForgotPassword: has errors");
 			return badRequest(password_forgot.render(filledForm));
 		} else {
 			// The email address given *BY AN UNKNWON PERSON* to the form - we

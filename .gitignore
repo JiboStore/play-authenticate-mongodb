@@ -19,3 +19,4 @@ server.pid
 .sbtserver*
 .settings/
 config-classes/
+/eclipse-out/
