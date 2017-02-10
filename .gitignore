@@ -20,3 +20,4 @@ server.pid
 .settings/
 config-classes/
 /eclipse-out/
+project/project/target
