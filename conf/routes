@@ -9,6 +9,10 @@ POST	/casino/apns/testpost		controllers.apns.CasinoApnsController.testpostAction
 POST	/casino/apns/register		controllers.apns.CasinoApnsController.registerAction()
 GET		/casino/apns/sendall		controllers.apns.CasinoApnsController.sendallAction()
 
+# SweetMaker
+POST	/sweetmaker/apns/register		controllers.apns.sweetmaker.SweetMakerApnsController.registerAction()
+GET		/sweetmaker/apns/sendall		controllers.apns.sweetmaker.SweetMakerApnsController.sendallAction()
+
 # Home page
 GET     /                           controllers.Application.index()
 GET     /restricted                 controllers.Application.restricted()

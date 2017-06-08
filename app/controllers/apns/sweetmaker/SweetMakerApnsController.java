@@ -22,7 +22,7 @@ import views.html.*;
 public class SweetMakerApnsController extends Controller {	
 	
 	private static final String certPath = 
-			"conf/certificates/server_certificates_bundle_sandbox/export_single_selection_root.p12";
+			"conf/certificates/sweetmaker/aps_development_sweetmaker.p12";
 	private static final String deviceToken = 
 			"2404d486d44d6718407ef5db94639b9a99942de0bdbc879ea4c5602625e65e1b";
 	
