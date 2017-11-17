@@ -28,6 +28,8 @@ public class CasinoApnsController extends Controller {
 	private static final String deviceToken = 
 			"2404d486d44d6718407ef5db94639b9a99942de0bdbc879ea4c5602625e65e1b";
 	
+	private static final String certPathProd = "conf/certificates/casino/aps_production_casino.p12";
+	
 	public static Result testpostAction() {
 		Logger.error("CasinoApnsController.testpostAction");
 		try {
@@ -84,6 +86,20 @@ public class CasinoApnsController extends Controller {
 //		for ( String szToken : token ) {
 //			service.push(szToken, payload);
 //		}
+		return ok(index.render());
+	}
+	
+	public static Result sendallprodAction() {
+		List<CasinoApnsUser> users = CasinoApnsUser.getAllUsers();
+		ApnsService service = APNS.newService().withCert(certPathProd, "123456")
+				.withProductionDestination()
+				.build();
+		String payload = APNS.newPayload().badge(1).alertBody("Production push!").build();
+		for ( CasinoApnsUser user : users ) {
+			service.push(user.token, payload);
+			user.lastpush = new Date();
+			CasinoApnsUser.save(user);
+		}
 		return ok(index.render());
 	}
 	
